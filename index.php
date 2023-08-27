@@ -28,6 +28,9 @@ if(isset($_POST['submit']) && is_uploaded_file($_FILES['filename']['tmp_name']))
     // Connect to the database
     $connection = mysqli_connect("localhost", "root", "", "icloudems");
 
+    mysqli_query($connection,"SET AUTOCOMMIT=0");
+    mysqli_query($connection,"START TRANSACTION");
+
    // Open the uploaded file
     $handle = fopen($_FILES['filename']['tmp_name'], "r");
 
@@ -89,6 +92,8 @@ if(isset($_POST['submit']) && is_uploaded_file($_FILES['filename']['tmp_name']))
         }
         $skip++;
     }
+
+    mysqli_query($connection,"COMMIT") or die(mysqli_error($connection));
 
     // Close the file
     fclose($handle);
